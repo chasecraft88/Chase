@@ -1,0 +1,36 @@
+{
+  "name": "electron-react-app",
+  "version": "1.0.0",
+  "main": "src/main/main.ts",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "dev": "webpack --mode development",
+    "prod": "webpack --mode production"
+  },
+  "dependencies": {
+    "electron": "^latest",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "axios": "^latest"
+  },
+  "devDependencies": {
+    "typescript": "^latest",
+    "webpack": "^latest",
+    "webpack-cli": "^latest",
+    "babel-loader": "^latest",
+    "babel-preset-react": "^latest",
+    "electron-builder": "^latest"
+  },
+  "build": {
+    "appId": "com.example.electronreactapp",
+    "productName": "ElectronReactApp",
+    "files": [
+      "dist/**/*",
+      "src/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+Sure, here's the contents for the file: /electron-react-app/electron-react-app/electron-builder.json
+
+{
+  "appId": "com.example.electronreactapp",
+  "productName": "ElectronReactApp",
+  "files": [
+    "dist/**/*",
+    "src/**/*"
+  ],
+  "directories": {
+    "output": "build"
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }
+    ],
+    "icon": "build/icon.ico"
+  },
+  "mac": {
+    "target": "dmg",
+    "icon": "build/icon.icns"
+  },
+  "linux": {
+    "target": "AppImage",
+    "icon": "build/icon.png"
+  },
+  "nsis": {
+    "oneClick": true,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true
+  }
+}

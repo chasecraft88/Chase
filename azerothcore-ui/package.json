@@ -1,0 +1,35 @@
+{
+  "name": "azerothcore-ui",
+  "version": "1.0.0",
+  "description": "A user interface for managing and modding AzerothCore private servers.",
+  "main": "src/index.tsx",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "axios": "^0.21.1",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.1.0",
+    "react-redux": "^7.2.5"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.2",
+    "eslint": "^7.14.0",
+    "eslint-plugin-react": "^7.27.0",
+    "eslint-config-airbnb": "^18.2.1"
+  },
+  "keywords": [
+    "AzerothCore",
+    "World of Warcraft",
+    "private server",
+    "modding",
+    "UI"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
