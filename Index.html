@@ -1,12 +1,128 @@
 <!DOCTYPE html>
-<html>
- <head> 
-  <title>Mage Game</title>
-  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
-  <link rel="stylesheet" type="text/css" href="Styles.css">
- </head> 
- <body> 
-  <canvas id="cvs"></canvas> 
-  <script src="Script.js"></script>
- </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChazeCroftCore Database Editor</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const App = () => {
+      const [token, setToken] = useState(null);
+      const [activeTab, setActiveTab] = useState('login');
+      const [configs, setConfigs] = useState({});
+      const [logs, setLogs] = useState([]);
+      const [tables, setTables] = useState([]);
+      const [username, setUsername] = useState('');
+      const [password, setPassword] = useState('');
+
+      const login = async () => {
+        try {
+          const response = await axios.post('/api/login', { username, password });
+          setToken(response.data.token);
+          setActiveTab('dashboard');
+        } catch (error) {
+          alert('Login failed');
+        }
+      };
+
+      const fetchData = async (endpoint, setter) => {
+        if (!token) return;
+        const response = await axios.get(`/api/${endpoint}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setter(response.data);
+      };
+
+      useEffect(() => {
+        if (token) {
+          fetchData('configs', setConfigs);
+          fetchData('logs', setLogs);
+          fetchData('tables', setTables);
+        }
+      }, [token]);
+
+      if (!token) {
+        return (
+          <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="bg-white p-6 rounded shadow-md">
+              <h2 className="text-2xl mb-4">Login</h2>
+              <input
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full mb-2 p-2 border rounded"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full mb-2 p-2 border rounded"
+              />
+              <button onClick={login} className="w-full bg-blue-500 text-white p-2 rounded">
+                Login
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="min-h-screen bg-gray-100">
+          <nav className="bg-blue-500 text-white p-4">
+            <ul className="flex space-x-4">
+              <li><button onClick={() => setActiveTab('configs')} className="hover:underline">Configs</button></li>
+              <li><button onClick={() => setActiveTab('logs')} className="hover:underline">Logs</button></li>
+              <li><button onClick={() => setActiveTab('database')} className="hover:underline">Database</button></li>
+              <li><button onClick={() => setActiveTab('ai')} className="hover:underline">AI Tools</button></li>
+            </ul>
+          </nav>
+          <div className="p-6">
+            {activeTab === 'configs' && (
+              <div>
+                <h2 className="text-2xl mb-4">Configurations</h2>
+                <pre>{JSON.stringify(configs, null, 2)}</pre>
+              </div>
+            )}
+            {activeTab === 'logs' && (
+              <div>
+                <h2 className="text-2xl mb-4">Server Logs</h2>
+                <ul>{logs.map((log, i) => <li key={i}>{log}</li>)}</ul>
+              </div>
+            )}
+            {activeTab === 'database' && (
+              <div>
+                <h2 className="text-2xl mb-4">Database Editor</h2>
+                {tables.map((table, i) => (
+                  <div key={i} className="mb-4">
+                    <h3 className="text-xl">{table.name}</h3>
+                    <p>{JSON.stringify(table.data)}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            {activeTab === 'ai' && (
+              <div>
+                <h2 className="text-2xl mb-4">AI Tools</h2>
+                <p>Future AI features coming soon (e.g., content generation, anomaly detection).</p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
 </html>
